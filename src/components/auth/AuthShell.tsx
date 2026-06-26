@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   GraduationCap,
   Moon,
@@ -148,9 +148,15 @@ function DashboardMock() {
 }
 
 export function ThemeLangBar() {
+  const [mounted, setMounted] = useState(false);
   const theme = useAppStore((s) => s.theme);
   const toggleTheme = useAppStore((s) => s.toggleTheme);
   const dark = theme === "dark";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className="flex items-center gap-2">
       <button
@@ -159,8 +165,8 @@ export function ThemeLangBar() {
         className="group flex h-9 items-center gap-2 rounded-full border border-border bg-card/60 px-3 text-xs backdrop-blur-xl transition hover:border-[var(--neon-purple)] hover:shadow-[0_0_18px_var(--neon-purple)]"
         aria-label="Toggle theme"
       >
-        {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-        <span className="font-medium">{dark ? "Light" : "Dark"}</span>
+        {mounted && dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+        <span className="font-medium">{mounted ? (dark ? "Light" : "Dark") : "Theme"}</span>
       </button>
     </div>
   );

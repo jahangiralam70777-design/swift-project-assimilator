@@ -32,8 +32,12 @@ export function useHomepageSections() {
   return useQuery({
     queryKey: SITE_CONTENT_KEY,
     queryFn: async () => {
-      const res = await publicGetHomepageContent();
-      return res.sections as SectionEntry[];
+      try {
+        const res = await publicGetHomepageContent();
+        return res.sections as SectionEntry[];
+      } catch {
+        return [] as SectionEntry[];
+      }
     },
     staleTime: 60_000,
     refetchOnWindowFocus: false,
@@ -44,9 +48,14 @@ export function useSiteSettings() {
   return useQuery({
     queryKey: SITE_SETTINGS_KEY,
     queryFn: async () => {
-      const res = await publicGetSiteSettings();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return res.settings as Record<string, Record<string, any>>;
+      try {
+        const res = await publicGetSiteSettings();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return res.settings as Record<string, Record<string, any>>;
+      } catch {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return {} as Record<string, Record<string, any>>;
+      }
     },
     // Short stale time + window-focus refetch acts as a safety net so notice
     // banner / live chat / whatsapp settings stay in sync even if the realtime
