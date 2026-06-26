@@ -26,6 +26,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as StudentRouteImport } from './routes/_student'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
@@ -154,6 +155,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -432,6 +438,7 @@ export interface FileRoutesByFullPath {
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/auth/': typeof AuthIndexRoute
   '/admin/users/analytics': typeof AdminUsersAnalyticsRoute
   '/admin/users/list': typeof AdminUsersListRoute
   '/api/public/chat-cleanup': typeof ApiPublicChatCleanupRoute
@@ -440,7 +447,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
   '/check-email': typeof CheckEmailRoute
   '/cookies': typeof CookiesRoute
@@ -492,6 +498,7 @@ export interface FileRoutesByTo {
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/auth': typeof AuthIndexRoute
   '/admin/users/analytics': typeof AdminUsersAnalyticsRoute
   '/admin/users/list': typeof AdminUsersListRoute
   '/api/public/chat-cleanup': typeof ApiPublicChatCleanupRoute
@@ -556,6 +563,7 @@ export interface FileRoutesById {
   '/auth/confirm': typeof AuthConfirmRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/auth/': typeof AuthIndexRoute
   '/admin/users/analytics': typeof AdminUsersAnalyticsRoute
   '/admin/users/list': typeof AdminUsersListRoute
   '/api/public/chat-cleanup': typeof ApiPublicChatCleanupRoute
@@ -620,6 +628,7 @@ export interface FileRouteTypes {
     | '/auth/confirm'
     | '/blog/$slug'
     | '/admin/'
+    | '/auth/'
     | '/admin/users/analytics'
     | '/admin/users/list'
     | '/api/public/chat-cleanup'
@@ -628,7 +637,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/blog'
     | '/check-email'
     | '/cookies'
@@ -680,6 +688,7 @@ export interface FileRouteTypes {
     | '/auth/confirm'
     | '/blog/$slug'
     | '/admin'
+    | '/auth'
     | '/admin/users/analytics'
     | '/admin/users/list'
     | '/api/public/chat-cleanup'
@@ -743,6 +752,7 @@ export interface FileRouteTypes {
     | '/auth/confirm'
     | '/blog/$slug'
     | '/admin/'
+    | '/auth/'
     | '/admin/users/analytics'
     | '/admin/users/list'
     | '/api/public/chat-cleanup'
@@ -892,6 +902,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -1312,11 +1329,13 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 interface AuthRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthConfirmRoute: typeof AuthConfirmRoute
+  AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
   AuthConfirmRoute: AuthConfirmRoute,
+  AuthIndexRoute: AuthIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
